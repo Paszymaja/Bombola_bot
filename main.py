@@ -1,22 +1,28 @@
 import os
+import requests
 
-import discord
+from bs4 import BeautifulSoup
+from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='!')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
 
-    if message.content == "!bombola":
-        response = "Bombola"
-        await message.channel.send(response)
-    elif message.content == "raise-exception":
-        raise discord.DiscordException
+@bot.command(name='cena', help='Aktualna cena pół bomboli pół sycylijskiej')
+async def nine_nine(cena):
+    name, price = [], []
+    url = 'https://www.pizzeriabombola.pl/menu.php'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    table = soup.find_all('div', attrs={'style': 'float: right; width: 450px; margin-top:5px;'})
 
-client.run(TOKEN)
+    for pizza in table:
+        name = pizza.find_all('strong')
+        price = pizza.find_all('td', class_='t3b')
+
+    await cena.send(f'Cena {name[0].text} to {price[0].text}')
+
+bot.run(TOKEN)

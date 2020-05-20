@@ -51,7 +51,7 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.send(ctx_message)
 
-    @tasks.loop(seconds=2)
+    @tasks.loop(minutes=10)
     async def timer(self):
         current_price = self.price_check(index=0)[1][:-3]
         if current_price != self.last_price:

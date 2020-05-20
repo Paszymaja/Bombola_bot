@@ -22,11 +22,12 @@ def price_check(index):
 
 
 class Bombola(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, guild_id):
         self.last_price = price_check(index=0)[1][:-3]
         self.bot = bot
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
+        self.guild_id = guild_id
 
     def cog_unload(self):
         self.timer.cancel()
@@ -68,4 +69,11 @@ class Bombola(commands.Cog):
 
     @timer.after_loop
     async def after_timer(self):
-        pass
+        await self.price_change()
+
+    @commands.Cog.listener()
+    async def price_change(self):
+        guild = self.bot.get_guild(self.guild_id)
+        channel = guild.text_channels[0]
+        await channel.send('@here Zmiana ceny!!!!')
+        self.last_price = price_check(index=0)[1][:-3]

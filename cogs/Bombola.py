@@ -22,12 +22,12 @@ def price_check(index):
 
 
 class Bombola(commands.Cog):
-    def __init__(self, bot, guild_id):
+    def __init__(self, bot):
         self.last_price = price_check(index=0)[1][:-3]
         self.bot = bot
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
-        self.guild_id = guild_id
+        self.guild_id = os.getenv('GUILD_ID')
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
 
     def cog_unload(self):

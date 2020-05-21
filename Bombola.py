@@ -28,6 +28,7 @@ class Bombola(commands.Cog):
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
         self.guild_id = guild_id
+        self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
 
     def cog_unload(self):
         self.timer.cancel()
@@ -44,8 +45,7 @@ class Bombola(commands.Cog):
     @commands.command(name='czas', help='czas od ostatniej zmiany ceny bomboli')
     async def time(self, ctx):
         date_object = datetime.datetime.now()
-        last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
-        elapsed_time = date_object - last_date
+        elapsed_time = date_object - self.last_date
         days = elapsed_time.days
 
         ctx_message = f'Od ostatniej zmiany ceny upłyneło {days} dni'
@@ -53,7 +53,7 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.send(ctx_message)
 
-    @tasks.loop(minutes=10)
+    @tasks.loop(minutes=30)
     async def timer(self):
         current_price = price_check(index=0)[1][:-3]
         if current_price != self.last_price:
@@ -64,8 +64,9 @@ class Bombola(commands.Cog):
 
     @timer.before_loop
     async def before_timer(self):
-        print('waiting...')
+        print('Bombola loop waiting...')
         await self.bot.wait_until_ready()
+        print('rdy')
 
     @timer.after_loop
     async def after_timer(self):
@@ -77,3 +78,4 @@ class Bombola(commands.Cog):
         channel = guild.text_channels[0]
         await channel.send('@here Zmiana ceny!!!!')
         self.last_price = price_check(index=0)[1][:-3]
+        self.last_date = datetime.datetime.now()

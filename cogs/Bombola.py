@@ -6,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
 
+from cogs import Delivery
+
 
 def price_check(index):
     pizza_name, pizza_price = [], []
@@ -29,6 +31,7 @@ class Bombola(commands.Cog):
         self.timer.start()
         self.guild_id = os.getenv('GUILD_ID')
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
+        self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
 
     def cog_unload(self):
         self.timer.cancel()
@@ -39,6 +42,14 @@ class Bombola(commands.Cog):
 
         ctx_message = f'Cena {pizza_name} to {pizza_price}'
 
+        print(ctx_message)
+        await ctx.send(ctx_message)
+
+    @commands.command(name='dostawa', help='Cena dostawy')
+    async def order(self, ctx):
+        image = Delivery.get_image(self.image_url)
+
+        ctx_message = f'Cena dostawy to {Delivery.delivery(image)[0]} zł'
         print(ctx_message)
         await ctx.send(ctx_message)
 

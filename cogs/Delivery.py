@@ -6,21 +6,21 @@ import numpy as np
 
 
 def get_image(url):
-    urllib.request.urlretrieve(url, 'Bombola_bot/temp/image.jpg')
-    img = cv2.imread('Bombola_bot/temp/image.jpg')
+    urllib.request.urlretrieve(url, 'temp/image.jpg')
+    img = cv2.imread('temp/image.jpg')
     y = 120
     h = 80
     x = 210
     w = 80
     img = img[y: y + h, x: x + w]
-    path = 'Bombola_bot/temp/crop_image.jpg'
+    path = 'temp/crop_image.jpg'
     cv2.imwrite(path, img)
     return path
 
 
 def delivery(price_image):
-    samples = np.loadtxt('Bombola_bot/data/generalsamples.data', np.float32)
-    responses = np.loadtxt('Bombola_bot/data/generalresponses.data', np.float32)
+    samples = np.loadtxt('data/generalsamples.data', np.float32)
+    responses = np.loadtxt('data/generalresponses.data', np.float32)
     responses = responses.reshape((responses.size, 1))
 
     model = cv2.ml.KNearest_create()

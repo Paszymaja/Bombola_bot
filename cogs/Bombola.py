@@ -13,7 +13,7 @@ def price_check(index):
     pizza_name, pizza_price = [], []
     url = 'https://www.pizzeriabombola.pl/menu.php'
     page = requests.get(url)
-    soup = BeautifulSoup(page.content, 'html.parser')
+    soup = BeautifulSoup(page.content, 'lxml')
     table = soup.find_all('div', attrs={'style': 'float: right; width: 450px; margin-top:5px;'})
 
     for pizza in table:
@@ -90,3 +90,4 @@ class Bombola(commands.Cog):
         await channel.send('@here Zmiana ceny!!!!')
         self.last_price = price_check(index=0)[1][:-3]
         self.last_date = datetime.datetime.now()
+        self.timer.start()  # restart timer

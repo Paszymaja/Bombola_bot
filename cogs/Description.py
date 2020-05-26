@@ -10,7 +10,7 @@ class Description(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.status = [f' 🍕 Bombola : {Bombola.price_check(index=0)[1]}',
-                       f' 🍕 Sycylijska : {Bombola.price_check(index=3)[1]}']
+                       f' 🍕 Sycylijska : {Bombola.price_check(index=2)[1]}']
         self.change_status.start()
         self.msgs = cycle(self.status)
 

@@ -1,5 +1,6 @@
 import datetime
 import os
+import random
 
 import asyncpg
 import requests
@@ -23,6 +24,15 @@ def price_check(index):
     return pizza_name[index].text, pizza_price[index].text
 
 
+def load_list():
+    review_list = []
+    for counter, entry in enumerate(os.listdir('data/review')):
+        if os.path.isfile(os.path.join('data/review', entry)):
+            with open('data/review/' + str(counter) + ".txt", encoding='utf-8') as fp:
+                review_list.append(fp.read().splitlines())
+    return review_list
+
+
 class Bombola(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -32,6 +42,7 @@ class Bombola(commands.Cog):
         self.guild_id = os.getenv('GUILD_ID')
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
+        self.review_list = load_list()
 
     def cog_unload(self):
         self.timer.cancel()
@@ -53,7 +64,7 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.send(ctx_message)
 
-    @commands.command(name='czas', help='czas od ostatniej zmiany ceny bomboli')
+    @commands.command(name='czas', help='Czas od ostatniej zmiany ceny bomboli')
     async def time(self, ctx):
         date_object = datetime.datetime.now()
         elapsed_time = date_object - self.last_date
@@ -63,6 +74,11 @@ class Bombola(commands.Cog):
 
         print(ctx_message)
         await ctx.send(ctx_message)
+
+    @commands.command(name='recenzja', help='Generowana recenzja')
+    async def review(self, ctx):
+        kor = [random.choice(self.review_list[index]) for index in range(3)]
+        await ctx.channel.send(" ".join(kor))
 
     @tasks.loop(minutes=30)
     async def timer(self):

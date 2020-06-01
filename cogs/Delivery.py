@@ -19,8 +19,8 @@ def get_image(url):
 
 
 def delivery(price_image):
-    samples = np.loadtxt('data/generalsamples.data', np.float32)
-    responses = np.loadtxt('data/generalresponses.data', np.float32)
+    samples = np.loadtxt('data/detection_models/generalsamples.data', np.float32)
+    responses = np.loadtxt('data/detection_models/generalresponses.data', np.float32)
     responses = responses.reshape((responses.size, 1))
 
     model = cv2.ml.KNearest_create()

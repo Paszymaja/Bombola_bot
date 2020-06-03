@@ -6,6 +6,7 @@ import asyncpg
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
+from twilio.rest import Client
 
 from cogs import Delivery
 
@@ -43,6 +44,9 @@ class Bombola(commands.Cog):
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
         self.review_list = load_list()
+        self.account_sid = os.getenv('ACC_SID')
+        self.auth_token = os.getenv('TOKEN')
+        self.client = Client(self.account_sid, self.auth_token)
 
     def cog_unload(self):
         self.timer.cancel()
@@ -61,6 +65,7 @@ class Bombola(commands.Cog):
         image = Delivery.get_image(self.image_url)
 
         ctx_message = f'Cena dostawy to {Delivery.delivery(image)[0]} zł'
+
         print(ctx_message)
         await ctx.send(ctx_message)
 
@@ -78,7 +83,22 @@ class Bombola(commands.Cog):
     @commands.command(name='recenzja', help='Generowana recenzja')
     async def review(self, ctx):
         kor = [random.choice(self.review_list[index]) for index in range(3)]
-        await ctx.channel.send(" ".join(kor))
+
+        ctx_message = " ".join(kor)
+
+        print(ctx_message)
+        await ctx.channel.send(ctx_message)
+
+    @commands.command(name='szymek', help='Zadzwoń do szymka')
+    async def call(self, ctx):
+        self.client.calls.create(url='https://github.com/Paszymaja/Bombola_bot/tree/master/data/call_response'
+                                     '/voice.xml',
+                                 from_='+12568010578',
+                                 to='+48691226333')
+        ctx_message = 'dzwonione'
+
+        print(ctx_message)
+        await ctx.channel.send(ctx_message)
 
     @tasks.loop(minutes=30)
     async def timer(self):

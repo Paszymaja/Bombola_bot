@@ -6,6 +6,7 @@ import asyncpg
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
+from twilio.rest import Client
 
 from cogs import Delivery
 
@@ -43,6 +44,11 @@ class Bombola(commands.Cog):
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
         self.review_list = load_list()
+        # zmienne potrzebne do dzwonienia
+        self.account_sid = os.getenv('ACC_SID')
+        self.auth_token = os.getenv('CALL_TOKEN')
+        self.szymek_number = os.getenv('SZYMEK_NUMBER')
+        self.call_timer = True
 
     def cog_unload(self):
         self.timer.cancel()
@@ -61,6 +67,7 @@ class Bombola(commands.Cog):
         image = Delivery.get_image(self.image_url)
 
         ctx_message = f'Cena dostawy to {Delivery.delivery(image)[0]} zł'
+
         print(ctx_message)
         await ctx.send(ctx_message)
 
@@ -78,11 +85,32 @@ class Bombola(commands.Cog):
     @commands.command(name='recenzja', help='Generowana recenzja')
     async def review(self, ctx):
         kor = [random.choice(self.review_list[index]) for index in range(3)]
-        await ctx.channel.send(" ".join(kor))
+
+        ctx_message = " ".join(kor)
+
+        print(ctx_message)
+        await ctx.channel.send(ctx_message)
+
+    @commands.command(name='szymek', help='Zadzwoń do szymka')
+    async def call(self, ctx):
+        client = Client(self.account_sid, self.auth_token)
+        if self.call_timer:
+            client.calls.create(url='https://github.com/Paszymaja/'
+                                    'Bombola_bot/blob/master/data/call_response/voice.xml',
+                                from_='+12568010578',
+                                to=self.szymek_number)
+            self.call_timer = False
+            ctx_message = 'dzwonione'
+        else:
+            ctx_message = 'Nie możesz teraz zadzwonić do Szymka. Spróbuj za  +/- 30 min'
+
+        print(ctx_message)
+        await ctx.channel.send(ctx_message)
 
     @tasks.loop(minutes=30)
     async def timer(self):
         current_price = price_check(index=0)[1][:-3]
+        self.call_timer = True  # timer do dzwonienia, nie znalazłem lepszego miejsca na to
         if current_price != self.last_price:
             print('Cena się zmieniła')
             self.timer.stop()

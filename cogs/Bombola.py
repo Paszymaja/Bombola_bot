@@ -44,8 +44,10 @@ class Bombola(commands.Cog):
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
         self.review_list = load_list()
+        # zmienne potrzebne do dzwonienia
         self.account_sid = os.getenv('ACC_SID')
-        self.auth_token = os.getenv('TOKEN')
+        self.auth_token = os.getenv('CALL_TOKEN')
+        self.szymek_number = os.getenv('SZYMEK_NUMBER')
         self.call_timer = True
 
     def cog_unload(self):
@@ -93,14 +95,14 @@ class Bombola(commands.Cog):
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
         if self.call_timer:
-            client.calls.create(url='https://github.com/Paszymaja/Bombola_bot/'
-                                    'tree/master/data/call_response/voice.xml',
+            client.calls.create(url='https://github.com/Paszymaja/'
+                                    'Bombola_bot/blob/master/data/call_response/voice.xml',
                                 from_='+12568010578',
-                                to='+48691226333')
+                                to=self.szymek_number)
             self.call_timer = False
             ctx_message = 'dzwonione'
         else:
-            ctx_message = 'Nie możesz teraz zadzwonić do Szymka. Spróbuj za 30 min'
+            ctx_message = 'Nie możesz teraz zadzwonić do Szymka. Spróbuj za  +/- 30 min'
 
         print(ctx_message)
         await ctx.channel.send(ctx_message)

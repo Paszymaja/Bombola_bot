@@ -8,10 +8,7 @@ import numpy as np
 def get_image(url):
     urllib.request.urlretrieve(url, 'temp/image.jpg')
     img = cv2.imread('temp/image.jpg')
-    y = 120
-    h = 80
-    x = 210
-    w = 80
+    x, y, h, w = 210, 120, 80, 80
     img = img[y: y + h, x: x + w]
     path = 'temp/crop_image.jpg'
     cv2.imwrite(path, img)
@@ -53,6 +50,7 @@ def delivery(price_image):
 
     try:
         os.remove('Bombola_bot/temp/image.jpg')
-    except:
+    except OSError as error:
+        print(error)
         pass
     return numbers

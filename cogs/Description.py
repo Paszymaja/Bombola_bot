@@ -23,7 +23,7 @@ class Description(commands.Cog):
         await self.bot.change_presence(activity=discord.Game(name=current_status))
 
     @change_status.before_loop
-    async def before_timer(self):
+    async def before_loop(self):
         print('Status loop waiting... ')
         await self.bot.wait_until_ready()
         print('rdy')

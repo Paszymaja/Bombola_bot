@@ -29,7 +29,7 @@ def load_list():
     review_list = []
     for counter, entry in enumerate(os.listdir('data/review')):
         if os.path.isfile(os.path.join('data/review', entry)):
-            with open('data/review/' + str(counter) + ".txt", encoding='utf-8') as fp:
+            with open(f'data/review/{counter}.txt', encoding='utf-8') as fp:
                 review_list.append(fp.read().splitlines())
     return review_list
 
@@ -37,10 +37,10 @@ def load_list():
 class Bombola(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.guild_id = os.getenv('GUILD_ID')
         self.last_price = price_check(index=0)[1][:-3]
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
-        self.guild_id = os.getenv('GUILD_ID')
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
         self.review_list = load_list()
@@ -52,20 +52,20 @@ class Bombola(commands.Cog):
     def cog_unload(self):
         self.timer.cancel()
 
-    @commands.command(name='cena', help='Aktualna cena pizzy w bomboli')
+    @commands.command(name='cena', help='Aktualna cena pizzy w bomboli.')
     async def price(self, ctx, index: int = 0):
         pizza_name, pizza_price = price_check(index)
 
-        ctx_message = f'Cena {pizza_name} to {pizza_price}'
+        ctx_message = f'Cena {pizza_name} to {pizza_price}.'
 
         print(ctx_message)
         await ctx.send(ctx_message)
 
-    @commands.command(name='dostawa', help='Cena dostawy')
+    @commands.command(name='dostawa', help='Cena dostawy.')
     async def order(self, ctx):
         image = Delivery.get_image(self.image_url)
 
-        ctx_message = f'Cena dostawy to {Delivery.delivery(image)[0]} zł'
+        ctx_message = f'Cena dostawy to {Delivery.delivery(image)[0]} zł.'
 
         print(ctx_message)
         await ctx.send(ctx_message)
@@ -76,7 +76,7 @@ class Bombola(commands.Cog):
         elapsed_time = date_object - self.last_date
         days = elapsed_time.days
 
-        ctx_message = f'Od ostatniej zmiany ceny upłyneło {days} dni'
+        ctx_message = f'Od ostatniej zmiany ceny upłyneło {days} dni.'
 
         print(ctx_message)
         await ctx.send(ctx_message)
@@ -91,7 +91,7 @@ class Bombola(commands.Cog):
         await ctx.channel.send(ctx_message)
 
     @commands.command(name='szymek', help='Zadzwoń do szymka.')
-    @commands.cooldown(1, 1800, commands.BucketType.default)
+    @commands.cooldown(1, 1800, commands.BucketType.default)  # 30 min in sec
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
         if not 9 < datetime.datetime.now().hour > 23:
@@ -110,6 +110,8 @@ class Bombola(commands.Cog):
     async def call_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             ctx_message = f'Nie możesz teraz zadzwonić do Szymka. Spróbuj za {error.retry_after / 60:.0f} min.'
+
+            print(ctx_message)
             await ctx.send(ctx_message)
         else:
             raise error

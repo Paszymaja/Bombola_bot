@@ -48,7 +48,6 @@ class Bombola(commands.Cog):
         self.account_sid = os.getenv('ACC_SID')
         self.auth_token = os.getenv('CALL_TOKEN')
         self.szymek_number = os.getenv('SZYMEK_NUMBER')
-        self.call_timer = True
 
     def cog_unload(self):
         self.timer.cancel()
@@ -71,7 +70,7 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.send(ctx_message)
 
-    @commands.command(name='czas', help='Czas od ostatniej zmiany ceny bomboli')
+    @commands.command(name='czas', help='Czas od ostatniej zmiany ceny bomboli.')
     async def time(self, ctx):
         date_object = datetime.datetime.now()
         elapsed_time = date_object - self.last_date
@@ -82,7 +81,7 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.send(ctx_message)
 
-    @commands.command(name='recenzja', help='Generowana recenzja')
+    @commands.command(name='recenzja', help='Generowana recenzja.')
     async def review(self, ctx):
         review_text = [random.choice(self.review_list[index]) for index in range(3)]
 
@@ -91,31 +90,38 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.channel.send(ctx_message)
 
-    @commands.command(name='szymek', help='Zadzwoń do szymka')
+    @commands.command(name='szymek', help='Zadzwoń do szymka.')
+    @commands.cooldown(1, 1800, commands.BucketType.default)
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
-        if self.call_timer and not 9 < datetime.datetime.now().hour > 23:
+        if not 9 < datetime.datetime.now().hour > 23:
             client.calls.create(url='https://github.com/Paszymaja/'
                                     'Bombola_bot/blob/master/data/call_response/voice.xml',
                                 from_='+12568010578',
                                 to=self.szymek_number)
-            self.call_timer = False
-            ctx_message = 'dzwonione'
+            ctx_message = 'dzwonione.'
         else:
-            ctx_message = 'Nie możesz teraz zadzwonić do Szymka. Spróbuj za  +/- 30 min'
+            ctx_message = 'Szymek śpi. 😴'
 
         print(ctx_message)
         await ctx.channel.send(ctx_message)
 
+    @call.error
+    async def call_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            ctx_message = f'Nie możesz teraz zadzwonić do Szymka. Spróbuj za {error.retry_after / 60:.0f} min.'
+            await ctx.send(ctx_message)
+        else:
+            raise error
+
     @tasks.loop(minutes=30)
     async def timer(self):
         current_price = price_check(index=0)[1][:-3]
-        self.call_timer = True  # timer do dzwonienia, nie znalazłem lepszego miejsca na to
         if current_price != self.last_price:
-            print('Cena się zmieniła')
+            print('Cena się zmieniła.')
             self.timer.stop()
         else:
-            print('Cena się nie zmieniła')
+            print('Cena się nie zmieniła.')
 
     @timer.before_loop
     async def before_timer(self):

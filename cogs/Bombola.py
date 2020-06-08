@@ -84,9 +84,9 @@ class Bombola(commands.Cog):
 
     @commands.command(name='recenzja', help='Generowana recenzja')
     async def review(self, ctx):
-        kor = [random.choice(self.review_list[index]) for index in range(3)]
+        review_text = [random.choice(self.review_list[index]) for index in range(3)]
 
-        ctx_message = " ".join(kor)
+        ctx_message = " ".join(review_text)
 
         print(ctx_message)
         await ctx.channel.send(ctx_message)
@@ -94,7 +94,7 @@ class Bombola(commands.Cog):
     @commands.command(name='szymek', help='Zadzwoń do szymka')
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
-        if self.call_timer:
+        if self.call_timer and not 9 < datetime.datetime.now().hour > 23:
             client.calls.create(url='https://github.com/Paszymaja/'
                                     'Bombola_bot/blob/master/data/call_response/voice.xml',
                                 from_='+12568010578',

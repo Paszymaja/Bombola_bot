@@ -94,7 +94,7 @@ class Bombola(commands.Cog):
     @commands.cooldown(1, 1800, commands.BucketType.default)  # 30 min in sec
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
-        if not 9 < datetime.datetime.now().hour > 23:
+        if not 10 < datetime.datetime.now().hour > 23:
             client.calls.create(url='https://github.com/Paszymaja/'
                                     'Bombola_bot/blob/master/data/call_response/voice.xml',
                                 from_='+12568010578',

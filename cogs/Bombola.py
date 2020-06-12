@@ -44,7 +44,7 @@ class Bombola(commands.Cog):
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
         self.review_list = load_list()
-        # zmienne potrzebne do dzwonienia
+        # variabebles used for calling
         self.account_sid = os.getenv('ACC_SID')
         self.auth_token = os.getenv('CALL_TOKEN')
         self.szymek_number = os.getenv('SZYMEK_NUMBER')

@@ -14,6 +14,13 @@ class ServerUtils(commands.Cog):
 
     @tasks.loop(seconds=3)
     async def daily_thoughts(self):
-        guild = self.bot.get_guild(self.guild_id)
-        channel = guild.text_channels[0]
-        print(channel)
+        pass
+
+    @daily_thoughts.before_loop
+    async def before_daily_thoughts(self):
+        print('daily thoughts loop waiting ...')
+        await self.bot.wait_until_ready()
+        print('rdy')
+        channel = self.bot.get_channel(207553209038798849)
+        messages = await channel.history(limit=200).flatten()
+        print(messages)

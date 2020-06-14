@@ -37,14 +37,14 @@ def load_list():
 class Bombola(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel_id = os.getenv('CHANNEL_ID')
+        self.main_channel_id = 449611698375229450
         self.last_price = price_check(index=0)[1][:-3]
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
         self.review_list = load_list()
-        # zmienne potrzebne do dzwonienia
+        # variables used for calling
         self.account_sid = os.getenv('ACC_SID')
         self.auth_token = os.getenv('CALL_TOKEN')
         self.szymek_number = os.getenv('SZYMEK_NUMBER')
@@ -137,7 +137,7 @@ class Bombola(commands.Cog):
 
     @commands.Cog.listener()
     async def price_change(self):
-        channel = self.bot.get_channel(self.channel_id)
+        channel = self.bot.get_channel(self.main_channel_id)
         await channel.send('@here Zmiana ceny!!!!')
         self.last_price = price_check(index=0)[1][:-3]
         self.last_date = datetime.datetime.now()

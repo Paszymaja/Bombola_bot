@@ -37,7 +37,7 @@ def load_list():
 class Bombola(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.guild_id = os.getenv('GUILD_ID')
+        self.channel_id = os.getenv('CHANNEL_ID')
         self.last_price = price_check(index=0)[1][:-3]
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
@@ -137,8 +137,7 @@ class Bombola(commands.Cog):
 
     @commands.Cog.listener()
     async def price_change(self):
-        guild = self.bot.get_guild(self.guild_id)
-        channel = guild.text_channels[0]
+        channel = self.bot.get_channel(self.channel_id)
         await channel.send('@here Zmiana ceny!!!!')
         self.last_price = price_check(index=0)[1][:-3]
         self.last_date = datetime.datetime.now()

@@ -19,7 +19,11 @@ class ServerUtils(commands.Cog):
     async def daily_thoughts(self):
         send_channel = self.bot.get_channel(self.bot_development_id)
         if datetime.datetime.now().hour == 12:
-            await send_channel.send(f'Srebrna myśl na dziś\n {random.choice(self.messages)}')
+            ctx_message = f'Srebrna myśl na dziś\n {random.choice(self.messages)}'
+            print(ctx_message)
+            await send_channel.send(ctx_message)
+        else:
+            print('hour loop')
 
     @daily_thoughts.before_loop
     async def before_daily_thoughts(self):

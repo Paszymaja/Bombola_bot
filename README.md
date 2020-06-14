@@ -13,7 +13,8 @@ Commands List
 
 Komenda | Co robi
 ----------------|--------------
-`!cena` | Aktualna cena pizzy w bomboli
-`!czas` | czas od ostatniej zmiany ceny bomboli
-`!dostawa` | Aktualna cena dostawy
-`!recenja` | Generowana recenzja
+`!cena` | Aktualna cena pizzy w bomboli.
+`!czas` | czas od ostatniej zmiany ceny bomboli.
+`!dostawa` | Aktualna cena dostawy.
+`!recenja` | Generowana recenzja.
+`!szymek` | Zadzwoń do Szymka na telefon.

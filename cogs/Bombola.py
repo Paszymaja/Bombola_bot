@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import random
 
@@ -37,7 +38,8 @@ def load_list():
 class Bombola(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.main_channel_id = 449611698375229450
+        self.config_data = json.load(open('data/id/id.json', 'r'))
+        self.main_channel_id = self.config_data['main_channel_id']
         self.last_price = price_check(index=0)[1][:-3]
         self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()

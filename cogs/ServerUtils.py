@@ -1,4 +1,5 @@
 import datetime
+import json
 import random
 
 from discord.ext import commands, tasks
@@ -7,18 +8,19 @@ from discord.ext import commands, tasks
 class ServerUtils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.thoughts_id = 207553209038798849
-        self.bot_development_id = 715172222205165629
+        self.config_data = json.load(open('data/id/id.json', 'r'))
+        self.thoughts_id = self.config_data['thoughts_id']
+        self.bot_development_id = self.config_data['bot_development_id']
         self.daily_thoughts.start()
         self.messages = []
 
     def cog_unload(self):
         self.daily_thoughts.cancel()
 
-    @tasks.loop(hours=1)
+    @tasks.loop(minutes=1)
     async def daily_thoughts(self):
         send_channel = self.bot.get_channel(self.bot_development_id)
-        if datetime.datetime.now().hour == 12:
+        if datetime.datetime.now().hour == 12 and datetime.datetime.now().minute == 0:
             ctx_message = f'Srebrna myśl na dziś\n {random.choice(self.messages)}'
             print(ctx_message)
             await send_channel.send(ctx_message)

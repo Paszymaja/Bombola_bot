@@ -49,7 +49,7 @@ def delivery(price_image):
     numbers.sort()
 
     try:
-        os.remove('Bombola_bot/temp/image.jpg')
+        os.remove('temp/image.jpg')
     except OSError as error:
         print(error)
         pass

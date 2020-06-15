@@ -23,7 +23,7 @@ class ServerUtils(commands.Cog):
             print(ctx_message)
             await send_channel.send(ctx_message)
         else:
-            print('hour loop')
+            print(f'hour loop {datetime.datetime.now().hour}')
 
     @daily_thoughts.before_loop
     async def before_daily_thoughts(self):

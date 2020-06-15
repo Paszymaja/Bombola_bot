@@ -27,12 +27,8 @@ def price_check(index):
 
 
 def load_list():
-    review_list = []
-    for counter, entry in enumerate(os.listdir('data/review')):
-        if os.path.isfile(os.path.join('data/review', entry)):
-            with open(f'data/review/{counter}.txt', encoding='utf-8') as fp:
-                review_list.append(fp.read().splitlines())
-    return review_list
+    return [open(file_path, encoding='utf-8').read().splitlines() for entry in os.listdir('data/review')
+            if os.path.isfile(file_path := os.path.join('data/review', entry))]
 
 
 class Bombola(commands.Cog):

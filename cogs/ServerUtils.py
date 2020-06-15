@@ -24,8 +24,6 @@ class ServerUtils(commands.Cog):
             ctx_message = f'Srebrna myśl na dziś\n {random.choice(self.messages)}'
             print(ctx_message)
             await send_channel.send(ctx_message)
-        else:
-            print(f'hour loop {datetime.datetime.now().hour}')
 
     @daily_thoughts.before_loop
     async def before_daily_thoughts(self):

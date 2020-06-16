@@ -86,7 +86,7 @@ class Bombola(commands.Cog):
         await ctx.channel.send(ctx_message)
 
     @commands.command(name='szymek', help='Zadzwoń do szymka.')
-    @commands.cooldown(1, 1800, commands.BucketType.default)  # 50 min in sec
+    @commands.cooldown(1, 1800, commands.BucketType.default)  # 30 min in sec
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
         if 10 < datetime.datetime.now().hour < 23:

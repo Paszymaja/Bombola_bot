@@ -10,7 +10,7 @@ class ServerUtils(commands.Cog):
         self.bot = bot
         self.config_data = json.load(open('data/id/id.json', 'r'))
         self.thoughts_id = self.config_data['thoughts_id']
-        self.bot_development_id = self.config_data['bot_development_id']
+        self.main_channel_id = self.config_data['main_channel_id']
         self.daily_thoughts.start()
         self.messages = []
 
@@ -19,7 +19,7 @@ class ServerUtils(commands.Cog):
 
     @tasks.loop(minutes=1)
     async def daily_thoughts(self):
-        send_channel = self.bot.get_channel(self.bot_development_id)
+        send_channel = self.bot.get_channel(self.main_channel_id)
         if datetime.datetime.now().hour == 12 and datetime.datetime.now().minute == 0:
             ctx_message = f'Srebrna myśl na dziś\n {random.choice(self.messages)}'
             print(ctx_message)

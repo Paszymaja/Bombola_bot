@@ -3,7 +3,6 @@ import json
 import os
 import random
 
-import asyncpg
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands, tasks
@@ -14,8 +13,7 @@ from cogs import Delivery
 
 def price_check(index):
     pizza_name, pizza_price = [], []
-    url = 'https://www.pizzeriabombola.pl/menu.php'
-    page = requests.get(url)
+    page = requests.get('https://www.pizzeriabombola.pl/menu.php')
     soup = BeautifulSoup(page.content, 'lxml')
     table = soup.find_all('div', attrs={'style': 'float: right; width: 450px; margin-top:5px;'})
 
@@ -37,7 +35,6 @@ class Bombola(commands.Cog):
         self.config_data = json.load(open('data/id/id.json', 'r'))
         self.main_channel_id = self.config_data['main_channel_id']
         self.last_price = price_check(index=0)[1][:-3]
-        self.timer.add_exception_type(asyncpg.PostgresConnectionError)
         self.timer.start()
         self.last_date = datetime.datetime.strptime(os.getenv('LAST_DATE'), '%Y %m %d')
         self.image_url = 'https://www.pizzeriabombola.pl/images/dowoz.jpg'
@@ -83,13 +80,13 @@ class Bombola(commands.Cog):
     async def review(self, ctx):
         review_text = [random.choice(self.review_list[index]) for index in range(3)]
 
-        ctx_message = " ".join(review_text)
+        ctx_message = ''.join(review_text)
 
         print(ctx_message)
         await ctx.channel.send(ctx_message)
 
     @commands.command(name='szymek', help='Zadzwoń do szymka.')
-    @commands.cooldown(1, 3000, commands.BucketType.default)  # 50 min in sec
+    @commands.cooldown(1, 1800, commands.BucketType.default)  # 50 min in sec
     async def call(self, ctx):
         client = Client(self.account_sid, self.auth_token)
         if 10 < datetime.datetime.now().hour < 23:

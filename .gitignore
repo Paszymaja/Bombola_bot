@@ -10,3 +10,5 @@ cogs/__pycache__/
 temp/crop_image.jpg
 temp/image.jpg
 venv/
+.idea/workspace.xml
+temp/data_out.txt

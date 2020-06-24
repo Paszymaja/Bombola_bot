@@ -1,7 +1,7 @@
 twilio~=6.42.0
 opencv-python~=4.2.0.34
 lxml
-numpy~=1.18.5
+numpy~=1.19.0
 asyncpg
 beautifulsoup4~=4.9.1
 discord~=1.0.1

@@ -1,4 +1,4 @@
-twilio~=6.42.0
+twilio~=6.43.0
 opencv-python~=4.2.0.34
 lxml
 numpy~=1.19.0

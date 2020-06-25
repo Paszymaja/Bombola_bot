@@ -18,3 +18,4 @@ Komenda | Co robi
 `!dostawa` | Aktualna cena dostawy.
 `!recenja` | Generowana recenzja.
 `!szymek` | Zadzwoń do Szymka na telefon.
+`!tekst` | Wiadomość generowana z łańcuchu Markova.

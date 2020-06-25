@@ -1,10 +1,10 @@
 import datetime
 import json
-import random
-import markovify
 import os
-import pyAesCrypt
+import random
 
+import markovify
+import pyAesCrypt
 from discord.ext import commands, tasks
 
 
@@ -30,6 +30,7 @@ class ServerUtils(commands.Cog):
         send_channel = self.bot.get_channel(self.main_channel_id)
         if datetime.datetime.now().hour == 12 and datetime.datetime.now().minute == 0:
             ctx_message = f'Srebrna myśl na dziś\n {random.choice(self.messages)}'
+
             print(ctx_message)
             await send_channel.send(ctx_message)
 
@@ -48,5 +49,6 @@ class ServerUtils(commands.Cog):
             ctx_message = 'Coś poszło nie tak. Spróbuj jeszcze raz.'
         else:
             ctx_message = chain
+
         print(ctx_message)
         await ctx.channel.send(ctx_message)

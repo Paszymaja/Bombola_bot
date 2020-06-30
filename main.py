@@ -9,8 +9,6 @@ from cogs.ServerUtils import ServerUtils
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
-bot.remove_command('help')
-bot.remove_command('list')
 
 if __name__ == '__main__':
     bot.add_cog(Bombola(bot))

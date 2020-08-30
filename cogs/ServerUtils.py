@@ -28,8 +28,12 @@ class ServerUtils(commands.Cog):
     @tasks.loop(minutes=1)
     async def daily_thoughts(self):
         send_channel = self.bot.get_channel(self.main_channel_id)
+        if len(self.messages) == 0:
+            await self.load_messages()
         if datetime.datetime.now().hour == 12 and datetime.datetime.now().minute == 0:
-            ctx_message = f'Srebrna myśl na dziś\n {random.choice(self.messages)}'
+            daily_message = random.choice(self.messages)
+            ctx_message = f'Srebrna myśl na dziś\n {daily_message}'
+            self.messages.remove(daily_message)
 
             print(ctx_message)
             await send_channel.send(ctx_message)
@@ -39,6 +43,9 @@ class ServerUtils(commands.Cog):
         print('daily thoughts loop waiting ...')
         await self.bot.wait_until_ready()
         print('rdy')
+        await self.load_messages()
+
+    async def load_messages(self):
         channel = self.bot.get_channel(self.thoughts_id)
         messages = await channel.history(limit=200).flatten()
         self.messages = [message.content for message in messages]

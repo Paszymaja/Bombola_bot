@@ -5,6 +5,6 @@ twilio~=6.45.1
 markovify~=0.8.3
 pyAesCrypt~=0.4.3
 discord~=1.0.1
-numpy~=1.19.1
+numpy~=1.19.2
 opencv-python~=4.4.0.42
 lxml~=4.5.2

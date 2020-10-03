@@ -85,6 +85,13 @@ class Bombola(commands.Cog):
         print(ctx_message)
         await ctx.channel.send(ctx_message)
 
+    @commands.command(name='telefon', help='Telefon do bomboli.')
+    async def number(self, ctx):
+        ctx_message = 'Telefon do bomboli: 322317525'
+
+        print(ctx_message)
+        await ctx.channel.send(ctx_message)
+
     @commands.command(name='szymek', help='Zadzwoń do szymka.')
     @commands.cooldown(1, 1800, commands.BucketType.default)  # 30 min in sec
     async def call(self, ctx):

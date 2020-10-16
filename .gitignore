@@ -1,14 +1,5 @@
-# Created by .ignore support plugin (hsz.mobi)
-.idea/.gitignore
-.idea/Bombola_bot.iml
-.idea/inspectionProfiles/
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
+.idea/
 __pycache__/
 cogs/__pycache__/
-temp/crop_image.jpg
-temp/image.jpg
+temp/
 venv/
-.idea/workspace.xml
-temp/data_out.txt

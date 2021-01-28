@@ -1,7 +1,7 @@
 git+https://github.com/Rapptz/discord.py
 requests~=2.25.1
 beautifulsoup4~=4.9.3
-twilio~=6.51.0
+twilio~=6.51.1
 markovify~=0.8.3
 pyAesCrypt~=0.4.4
 discord~=1.0.1

@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import random
+import gzip
 
 import requests
 from bs4 import BeautifulSoup
@@ -140,7 +141,7 @@ class Bombola(commands.Cog):
     @commands.Cog.listener()
     async def price_change(self):
         channel = self.bot.get_channel(self.main_channel_id)
-        await channel.send('@here Zmiana ceny!!!!')
+        await channel.send('@Kedzar#9391  Zmiana ceny!!!!')
         self.last_price = price_check(index=0)[1][:-3]
         self.last_date = datetime.datetime.now()
         self.timer.start()  # restart timer
